@@ -18,22 +18,19 @@ node4.next = node5;
 //1 -> 2 -> 3 -> 4 -> 5 -> null
 
 
+
 //链表的逆置
 //线性数据结构链表，每一个点都认为自己是根节点
 
-function nizhi(root){
-  if(root.next.next == null){
-    root.next.next = root;
-    return root.next;
-  }else {
-    var result = nizhi(root.next);
-    root.next.next = root;
-    root.next = null;
-    return result;
-  }
+function reverseList(root){
+  if(root == null || root.next == null) return root;
+  const result = reverseList(root.next);
+  root.next.next = root;
+  root.next = null;
+  return result;
 }
 
-var newRoot = nizhi(node1);
+var newRoot = reverseList(node1);
 
 //链表的遍历
 function bianLink(root){
