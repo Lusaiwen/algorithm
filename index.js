@@ -16,6 +16,7 @@ function exchange(arr, a, b){
 
 
 function sort(arr){
+  if(arr == null || arr.length == 0 ) return;
   for(var i = 0; i< arr.length; i++){
     for(var j = 0; j < arr.length - 1 - i; j ++){
       if(compare(arr[j], arr[j + 1])){
