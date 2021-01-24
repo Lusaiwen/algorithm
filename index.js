@@ -17,11 +17,13 @@ function exchange(arr, a, b){
 
 function sort(arr){
   for(var i = 0; i< arr.length; i++){
-    for(var j = 0; j < arr.length - 1 - i; j ++){
-      if(compare(arr[j], arr[j + 1])){
-        exchange(arr, j, j + 1);
+    var maxIndex = 0;
+    for(var j = 0; j < arr.length - i; j ++){
+      if(compare(arr[j], arr[maxIndex])){
+        maxIndex = j;
       }
     }
+    exchange(arr, maxIndex, arr.length - 1 - i);
   }
 }
 
