@@ -1,45 +1,31 @@
-function Node(value){
-  this.value = value;
-  this.next = null;
+
+
+var arr = [4,7,8,3,2,1,5,5,9,6];
+
+
+//arr.sort(fucntion(){return a - b > 0})
+function compare(a, b){
+  return a - b > 0;
 }
 
-var node1 = new Node(1);
-var node2 = new Node(2);
-var node3 = new Node(3);
-var node4 = new Node(4);
-var node5 = new Node(5);
+function exchange(arr, a, b){
+  var temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
+}
 
 
-node1.next = node2;
-node2.next = node3;
-node3.next = node4;
-node4.next = node5;
-
-//1 -> 2 -> 3 -> 4 -> 5 -> null
-
-
-//链表的逆置
-//线性数据结构链表，每一个点都认为自己是根节点
-
-function nizhi(root){
-  if(root.next.next == null){
-    root.next.next = root;
-    return root.next;
-  }else {
-    var result = nizhi(root.next);
-    root.next.next = root;
-    root.next = null;
-    return result;
+function sort(arr){
+  for(var i = 0; i< arr.length; i++){
+    for(var j = 0; j < arr.length - 1 - i; j ++){
+      if(compare(arr[j], arr[j + 1])){
+        exchange(arr, j, j + 1);
+      }
+    }
   }
 }
 
-var newRoot = nizhi(node1);
+sort(arr);
 
-//链表的遍历
-function bianLink(root){
-  if(root == null) return;
-  console.log(root.value);
-  bianLink(root.next);
-}
+console.log(arr);
 
-bianLink(newRoot);
