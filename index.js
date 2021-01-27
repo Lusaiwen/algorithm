@@ -29,18 +29,27 @@ C.right = G;
 B.left = D;
 B.right = E;
 
-function wideSearch(rootList, target) {
-  if(rootList == null || rootList.length == 0) return false;
-  var childrenList = [];
-  for(var i = 0; i < rootList.length; i++){
-    if(rootList[i] != null && rootList[i].value == target){
-      return true;
-    }else {
-      rootList[i].left ? childrenList.push(rootList[i].left) : null;
-      rootList[i].right ? childrenList.push(rootList[i].right) : null;
-    }
-  }
-  return wideSearch(childrenList, target);
+var A2 = new Node('A');
+var B2 = new Node('B');
+var C2 = new Node('C');
+var D2 = new Node('D');
+var E2 = new Node('E');
+var F2 = new Node('F');
+var G2 = new Node('G');
+
+A2.left = C2;
+A2.right = B2;
+C2.left = F2;
+C2.right = G2;
+B2.left = D2;
+B2.right = E2;
+
+function compareTree(root1, root2){
+  if(root1 == root2) return true;
+  if(root1 == null && root2 != null || root1 != null && root2 == null || root1.value != root2.value) return false;
+  var leftBool = compareTree(root1.left, root2.left);
+  var rightBool = compareTree(root1.right, root2.right)
+  return leftBool && rightBool;
 }
 
-console.log(wideSearch([A], 'G'));
+console.log(compareTree(A, A2));
