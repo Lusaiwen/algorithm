@@ -1,46 +1,41 @@
 
-function Node(value) {
+/** 
+ * -             A
+            C        B
+          F   G    D   E
+1. 前序遍历：A C F G B D E 
+2. 中序遍历：F C G A D B E
+*/
+
+const qian = ['A','C','F','G','B','D','E'];
+const zhong = ['F','C','G','A','D','B','E'];
+
+function Node(value){
   this.value = value;
   this.left = null;
   this.right = null;
 }
 
-var a = new Node('a');
-var b = new Node('b');
-var c = new Node('c');
-var d = new Node('d');
-var e = new Node('e');
-var f = new Node('f');
-var g = new Node('g');
-
-a.left = c;
-a.right = b;
-c.left = f;
-c.right = g;
-b.left = d;
-b.right = e;
-
-//前序遍历  当前   左子树   右子树
-function preBian(root){
-  if(root == null) return;
-  console.log(root.value);
-  preBian(root.left);
-  preBian(root.right);
+function f1(qian, zhong) {
+  if(qian == null || zhong == null || qian.length == 0 || zhong.length == 0 || qian.length != zhong.length) return null;
+  var root = new Node(qian[0]);
+  var index = zhong.indexOf(qian[0]);
+  var qianLeft = qian.slice(1, index + 1);
+  var qianRight = qian.slice(index + 1, qian.length);
+  var zhongLeft = zhong.slice(0, index);
+  var zhongRight = zhong.slice(index + 1, zhong.length);
+  root.left = f1(qianLeft, zhongLeft);
+  root.right = f1(qianRight, zhongRight);
+  return root;
 }
 
-//中序遍历  左子树  当前   右子树
-function middleBian(root){
-  if(root == null) return;
-  middleBian(root.left);
-  console.log(root.value);
-  middleBian(root.right);
-}
-
-//后序遍历  左子树  右子树  当前
-function backBian(root) {
+function backBian(root){
   if(root == null) return;
   backBian(root.left);
   backBian(root.right);
-  console.log(root.value);
+  console.log(root.value); 
 }
-backBian(a);
+
+const root = f1(qian, zhong);
+backBian(root);
+
