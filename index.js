@@ -6,7 +6,9 @@
 2. 中序遍历：F C G A D B E
 */
 
-function Node(value) {
+const { indigo } = require("color-name");
+
+function Node(value){
   this.value = value;
   this.left = null;
   this.right = null;
@@ -27,12 +29,18 @@ C.right = G;
 B.left = D;
 B.right = E;
 
-
-function deepSearch(root, target){
-  if(root == null) return false;
-  if(root.value == target) return true;
-  var left = deepSearch(root.left, target);
-  var right = deepSearch(root.right, target);
-  return left || right;
+function wideSearch(rootList, target) {
+  if(rootList == null || rootList.length == 0) return false;
+  var childrenList = [];
+  for(var i = 0; i < rootList.length; i++){
+    if(rootList[i] != null && rootList[i].value == target){
+      return true;
+    }else {
+      rootList[i].left ? childrenList.push(rootList[i].left) : null;
+      rootList[i].right ? childrenList.push(rootList[i].right) : null;
+    }
+  }
+  return wideSearch(childrenList, target);
 }
-console.log(deepSearch(A, 'F'));
+
+console.log(wideSearch([A], 'G'));
