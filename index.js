@@ -37,8 +37,9 @@ var E2 = new Node('E');
 var F2 = new Node('F');
 var G2 = new Node('G');
 
-A2.left = C2;
-A2.right = B2;
+//左右互换位置
+A2.left = B2;
+A2.right = C2;
 C2.left = F2;
 C2.right = G2;
 B2.left = D2;
@@ -46,10 +47,10 @@ B2.right = E2;
 
 function compareTree(root1, root2){
   if(root1 == root2) return true;
-  if(root1 == null && root2 != null || root1 != null && root2 == null || root1.value != root2.value) return false;
-  var leftBool = compareTree(root1.left, root2.left);
-  var rightBool = compareTree(root1.right, root2.right)
-  return leftBool && rightBool;
+  if(root1 == null && root2 != null || root1 != null && root2 == null) return false;
+  if(root1.value != root2.value) return false;
+  return compareTree(root1.left, root2.left) && compareTree(root1.right, root2.right) ||
+  compareTree(root1.left, root2.right) && compareTree(root1.right, root2.left);
 }
 
 console.log(compareTree(A, A2));
