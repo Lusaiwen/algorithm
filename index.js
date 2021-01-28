@@ -5,8 +5,7 @@
 1. 前序遍历：A C F G B D E 
 2. 中序遍历：F C G A D B E
 */
-
-const { indigo } = require("color-name");
+  
 
 function Node(value){
   this.value = value;
