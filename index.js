@@ -1,3 +1,5 @@
+const { beige } = require("color-name");
+
 /**
  *       A  4   B   6   D
  *
@@ -46,70 +48,98 @@ var C = new Node('C');
 var D = new Node('D');
 var E = new Node('E');
 
-
 pointSet.push(A);
 pointSet.push(B);
 pointSet.push(C);
 pointSet.push(D);
 pointSet.push(E);
 
-
-function getIndex(str, pointSet){
-  for(var i = 0; i < pointSet.length; i ++){
-    if(pointSet[i].value == str){
-      return i;
+function canLink(resultList, tempBegin, tempEnd) {
+  var beginIn = (endIn = null);
+  for (var i = 0; i < resultList.length; i++) {
+    if (resultList[i].indexOf(tempBegin) > -1) {
+      beginIn = resultList[i];
+    }
+    if (resultList[i].indexOf(tempEnd) > -1) {
+      endIn = resultList[i];
     }
   }
+  /* 1. 两个都是新节点，新增部落
+   * 2. begin在A部落，end为空，A部落扩张end
+   * 3. begin为空， end在A部落，A部落扩张begin
+   * 4. begin在A部落，end在B部落，A扩张B部落
+   * 5. begin在A部落，end也在A部落
+   */
+  if (beginIn != null && endIn != null && beginIn == endIn) {
+    return false;
+  }
+  return true;
 }
 
-
-
-function getIndex(str, pointSet){
-  for(var i = 0; i < pointSet.length; i ++){
-    if(pointSet[i].value == str){
-      return i;
+function link(resultList, tempBegin, tempEnd) {
+  var beginIn = null;
+  var endIn = null;
+  for (var i = 0; i < resultList.length; i++) {
+    if (resultList[i].indexOf(tempBegin) > -1) {
+      beginIn = resultList[i];
+    }
+    if (resultList[i].indexOf(tempEnd) > -1) {
+      endIn = resultList[i];
     }
   }
+  /* 1. 两个都是新节点，新增部落
+   * 2. begin在A部落，end为空，A部落扩张end
+   * 3. begin为空， end在A部落，A部落扩张begin
+   * 4. begin在A部落，end在B部落，A扩张B部落
+   * 5. begin在A部落，end也在A部落.
+   */
+  if (beginIn == null && endIn == null) {
+    //都没有部落
+    var newArr = [];
+    newArr.push(tempBegin);
+    newArr.push(tempEnd);
+    resultList.push(newArr);
+  } else if (beginIn != null && endIn == null) {
+    beginIn.push(tempEnd);
+  } else if (beginIn == null && endIn != null) {
+    endIn.push(tempBegin);
+  } else if (beginIn != null && endIn != null && beginIn != endIn) {
+    var all = beginIn.concat(endIn);
+    var needRemove = resultList.indexOf(endIn);
+    resultList.splice(needRemove, 1);
+    needRemove = resultList.indexOf(beginIn);
+    resultList.splice(needRemove, 1);
+    resultList.push(all);
+  }
+  tempBegin.neighbour.push(tempEnd);
+  tempEnd.neighbour.push(tempBegin);
 }
 
-//传入所有点的集合，距离，已经连接点的集合
-//根据当前已有的节点，来进行判断，获得距离最短的点
-function getMinDisNode(pointSet, distance, nowPointSet){
-  var fromNode = null;
-  var toNode = null;
-  var minDis = 10000;
-  for(var i = 0; i < nowPointSet.length; i++ ){
-    var nowIndex = getIndex(nowPointSet[i].value, pointSet);
-    for(var j = 0; j < distance[nowIndex].length; j ++){
-      var thisNode = pointSet[j];
-      if(nowPointSet.indexOf(thisNode) < 0 //当前点不在已经连接的点
-      && distance[nowIndex][j] < minDis){
-        fromNode = nowPointSet[i];
-        toNode = pointSet[j];
-        minDis = distance[nowIndex][j];
+function kruskal(pointSet, distance) {
+  var resultList = []; //二位数组，部落
+  while (true) {
+    var minDis = max;
+    var begin = (end = null);
+    for (var i = 0; i < pointSet.length; i++) {
+      for (var j = 0; j < distance[i].length; j++) {
+        var tempBegin = pointSet[i];
+        var tempEnd = pointSet[j];
+        if (
+          distance[i][j] < minDis &&
+          i != j &&
+          canLink(resultList, tempBegin, tempEnd)
+        ) {
+          begin = tempBegin;
+          end = tempEnd;
+          minDis = distance[i][j];
+        }
       }
     }
-  }
-  fromNode.neighbour.push(toNode);
-  toNode.neighbour.push(fromNode);
-  return toNode;
-}
-
-
-
-
-function prim(pointSet, distance, start){
-  var nowPointSet = [];
-  nowPointSet.push(start);
-  //获取最短的边
-  while(true){
-    var minDisNode = getMinDisNode(pointSet, distance, nowPointSet);
-    nowPointSet.push(minDisNode);
-    if(nowPointSet.length == pointSet.length) break;
+    link(resultList, begin, end);
+    if (resultList.length == 1 && resultList[0].length == pointSet.length)
+      break;
   }
 }
 
-
-prim(pointSet, distance, pointSet[2]);
-
+kruskal(pointSet, distance);
 console.log(pointSet);
