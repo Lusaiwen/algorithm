@@ -103,7 +103,10 @@ function change(root) {
     if (changeTreeDepth > noChangeDepth) {
       root.left = leftChange(root.left);
     }
-    return rightChange(root);
+    var newRoot = rightChange(root);
+    newRoot.right = change(newRoot.right);
+    newRoot = change(newRoot);
+    return newRoot;
   } else {
     //右边深,左单旋
     var changeTreeDepth = getDepth(root.right.left);
@@ -111,7 +114,10 @@ function change(root) {
     if (changeTreeDepth > noChangeDepth) {
       root.right = rightChange(root.right);
     }
-    return leftChange(root);
+    var newRoot = leftChange(root);
+    newRoot.left = change(newRoot.left);
+    newRoot = change(newRoot);
+    return newRoot;
   }
 }
 
@@ -128,4 +134,5 @@ num = 0;
 var newRoot = change(root);
 console.log(searchTree(newRoot, 45677));
 console.log(num);
+console.log(isBanlance(newRoot));
 // s
