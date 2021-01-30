@@ -1,63 +1,42 @@
-var arr = [];
-
-for (var i = 0; i < 10000; i++) {
-  arr[i] = Math.floor(Math.random() * 100000);
-}
-
-var num = 0;
-
-function search(arr, target) {
-  for(var i = 0; i < arr.length; i ++){
-    num ++;
-    if(arr[i] == target){
-      return true;
-    }
-  }
-  return false;
-}
 
 function Node(value) {
   this.value = value;
   this.left = this.right = null;
 }
 
-function addNode(root, num) { 
-  if(root == null) return;
-  if(root.value == num) return;
-  if(num >= root.value) {
-    if(root.right != null) addNode(root.right, num)
-    else root.right = new Node(num);
+var A = new Node('A');
+var B = new Node('B');
+var C = new Node('C');
+var D = new Node('D');
+var E = new Node('E');
+var F = new Node('F');
+var G = new Node('G');
+var H = new Node('H');
+var I = new Node('I');
+
+A.left = B;
+A.right = C;
+B.left = D;
+B.right = E;
+C.left = F;
+C.right = G;
+D.right = H;
+E.right = I;
+
+function getDepth(root) {
+  if(root == null) return 0;
+  return Math.max(getDepth(root.left), getDepth(root.right)) + 1; 
+}
+
+function isBalance(root){
+  if(root == null) return true;
+  var leftDepth = getDepth(root.left);
+  var rightDepth = getDepth(root.right);
+  if(Math.abs(leftDepth - rightDepth) > 1){
+    return false;
   }else {
-    if(root.left != null) addNode(root.left, num)
-    else root.left = new Node(num);
+    return isBalance(root.left) && isBalance(root.right);
   }
 }
 
-
-
-function buildTree(arr) {
-  if (arr == null || arr.length == 0) return;
-  var root = new Node(arr[0]);
-  for(var i = 1; i < arr.length; i ++){
-      addNode(root, arr[i]);
-  }
-  return root;
-}
-
-
-var num2 = 0;
-function searchByTree(root, target){
-  if(root == null) return false;
-  num2 ++;
-  if(root.value == target) return true;
-  if(target >= root.value) return searchByTree(root.right, target)
-  else return searchByTree(root.left, target);
-}
-
-console.log(search(arr, 9), num);
-
-var root = buildTree(arr);
-var flag = searchByTree(root, 9);
-console.log(flag, num2);
-
-
+console.log(isBalance(A));
