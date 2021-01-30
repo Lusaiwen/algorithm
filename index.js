@@ -27,6 +27,36 @@ function isBanlance(root) {
   } else return isBanlance(root.left) && isBanlance(root.right);
 }
 
+function addNode(root, value) {
+  if (root == null) return;
+  if (root.value == value) return;
+  if (value >= root.value) {
+    if (root.right != null) addNode(root.right, value);
+    else root.right = new Node(value);
+  } else {
+    if (root.left != null) addNode(root.left, value);
+    else root.left = new Node(value);
+  }
+}
+
+function buildSearchTree(arr) {
+  if (arr == null || arr.length == 0) return;
+  var root = new Node(arr[0]);
+  for (var i = 1; i < arr.length; i++) {
+    addNode(root, arr[i]);
+  }
+  return root;
+}
+
+var num = 0;
+function searchTree(root, target) {
+  if (root == null) return false;
+  num++;
+  if (root.value == target) return true;
+  if (target >= root.value) return searchTree(root.right, target);
+  else return searchTree(root.left, target);
+}
+
 function leftChange(root) {
   /**
    * 1. 找到新根
@@ -51,7 +81,7 @@ function rightChange(root) {
    * 5. 返回新的根节点
    */
   var newRoot = root.left;
-  var changeTree = root.left.right; 
+  var changeTree = root.left.right;
   root.left = changeTree;
   newRoot.right = root;
   return newRoot;
@@ -59,22 +89,43 @@ function rightChange(root) {
 
 function change(root) {
   if (isBanlance(root)) return root;
-  if (root.left != null) change(root.left);
-  if (root.right != null) change(root.right);
+  if (root.left != null) root.left = change(root.left);
+  if (root.right != null) root.right = change(root.right);
   var leftDepth = getDepth(root.left);
   var rightDepth = getDepth(root.right);
-  if (Math.abs((leftDepth = rightDepth)) < 2) {
-    return true;
+  if (Math.abs((leftDepth - rightDepth)) < 2) {
+    return root;
   } else if (leftDepth > rightDepth) {
     //左边深，右单旋
+    //如果变化分支深度大于不变分支，左右双旋
+    var changeTreeDepth = getDepth(root.left.right);
+    var noChangeDepth = getDepth(root.left.left);
+    if (changeTreeDepth > noChangeDepth) {
+      root.left = leftChange(root.left);
+    }
     return rightChange(root);
   } else {
     //右边深,左单旋
+    var changeTreeDepth = getDepth(root.right.left);
+    var noChangeDepth = getDepth(root.right.right);
+    if (changeTreeDepth > noChangeDepth) {
+      root.right = rightChange(root.right);
+    }
     return leftChange(root);
   }
 }
 
-console.log(isBanlance(node2));
-var newRoot = change(node2);
-console.log(isBanlance(newRoot));
-console.log(newRoot);
+var arr = [];
+for (var i = 0; i < 100000; i++) {
+  arr[i] = Math.floor(Math.random() * 100000);
+}
+
+var root = buildSearchTree(arr);
+console.log(searchTree(root, 45677));
+console.log(num);
+
+num = 0;
+var newRoot = change(root);
+console.log(searchTree(newRoot, 45677));
+console.log(num);
+// s
