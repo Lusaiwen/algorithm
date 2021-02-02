@@ -2,11 +2,11 @@
 
 //0, 1, 1, 2, 3, 5, 8,
 
-function fibo (n) {
+function jump (n) {
   if(n <= 0) return -1;
-  if(n == 1) return 0;
-  if(n == 2) return 1;
-  return fibo(n - 1) + fibo (n - 2);
+  if(n == 1) return 1;
+  if(n == 2) return 2;
+  return jump(n - 1) + jump(n - 2);
 }
 
-console.log(fibo(8));
+console.log(jump(5));
