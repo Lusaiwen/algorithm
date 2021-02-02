@@ -1,7 +1,7 @@
 
 function Node(value) {
   this.value = value;
-  this.childs = [];
+  this.neighbour = [];
 }
 
 var a = new Node('a');
@@ -11,27 +11,37 @@ var d = new Node('d');
 var e = new Node('e');
 var f = new Node('f');
 
-a.childs.push(c);
-a.childs.push(f);
-a.childs.push(b);
-b.childs.push(d);
-b.childs.push(e);
 
+a.neighbour.push(b);
+a.neighbour.push(c);
+b.neighbour.push(a);
+b.neighbour.push(c);
+b.neighbour.push(d);
+c.neighbour.push(a);
+c.neighbour.push(b);
+c.neighbour.push(d);
+d.neighbour.push(b);
+d.neighbour.push(e);
+e.neighbour.push(d);
 
-function bfs(roots, target) {
-  if(roots == null || roots.length == 0) return false;
-  var childs = [];
-  for(var i = 0; i < roots.length; i ++){
-    if(roots[i].value == target) {
-      return true;
-    }else {
-      childs = childs.concat(roots[i].childs);
+function deepSearch(node, target, path){
+  if(node == null) return false;
+  if(path.indexOf(node) > -1) return false;
+  if(node.value == target) return true;
+  path.push(node);
+  var flag = false;
+  for(var i = 0; i < node.neighbour.length; i ++){
+    if(deepSearch(node.neighbour[i], target, path)) {
+      flag = true;
+      break;
     }
   }
-  return bfs(childs, target);
+  return flag; 
+
 }
 
-console.log(bfs([a], 'c'));
+
+console.log(deepSearch(b, 'e', []));
 
 
 
