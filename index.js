@@ -18,15 +18,20 @@ a.childs.push(f);
 b.childs.push(d);
 b.childs.push(e);
 
-function deepSearch(root) {
-  if(root == null) return;
-  console.log(root.value);
+function deepSearch(root, target) {
+  if(root == null) return false;
+  if(root.value == target) return true;
+  var flag = false;
   for(var i = 0; i < root.childs.length; i ++) {
-    deepSearch(root.childs[i]);
+    if(deepSearch(root.childs[i], target)){
+      flag = true;
+    }
   }
+  return flag;
 }
 
-deepSearch(a);
+console.log(deepSearch(a, 'n'));
+// deepSearch(a);
 
 
 
