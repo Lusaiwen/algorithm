@@ -24,24 +24,21 @@ d.neighbour.push(b);
 d.neighbour.push(e);
 e.neighbour.push(d);
 
-function deepSearch(node, target, path){
-  if(node == null) return false;
-  if(path.indexOf(node) > -1) return false;
-  if(node.value == target) return true;
-  path.push(node);
-  var flag = false;
-  for(var i = 0; i < node.neighbour.length; i ++){
-    if(deepSearch(node.neighbour[i], target, path)) {
-      flag = true;
-      break;
-    }
-  }
-  return flag; 
 
+
+function bfs(nodes, target, path) {
+  if(nodes == null || nodes.length == 0) return false;
+  var nextNodes = [];
+  for(var i = 0; i < nodes.length; i ++){
+    if(path.indexOf(nodes[i]) > -1) continue;
+    path.push(nodes[i]);
+    if(nodes[i].value == target) return true;
+    else nextNodes = nextNodes.concat(nodes[i].neighbour);
+  }
+  return bfs(nextNodes, target, path);
 }
 
-
-console.log(deepSearch(b, 'e', []));
+console.log(bfs([a], 'n', []));
 
 
 
