@@ -11,10 +11,9 @@ var d = new Node('d');
 var e = new Node('e');
 var f = new Node('f');
 
-
-a.childs.push(b);
 a.childs.push(c);
 a.childs.push(f);
+a.childs.push(b);
 b.childs.push(d);
 b.childs.push(e);
 
